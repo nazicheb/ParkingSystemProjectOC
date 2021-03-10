@@ -19,6 +19,7 @@
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
             <version>2.12.1</version>
+         
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
@@ -125,20 +126,17 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.5</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>jacoco-report</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <configuration>
+                   <excludes>
+                     <exclude>**/config*/</exclude>
+                     <exclude>**/dao*/</exclude>
+                     <exclude>**/constants*/</exclude>
+                     <exclude>**/model*/</exclude>
+                     <exclude>**/util*/</exclude>
+                     <exclude>**/InteractiveShell*/</exclude>
+                     <exclude>**/App*/</exclude>
+                   </excludes>
+               </configuration>
             </plugin>
         </plugins>
     </build>
