@@ -14,17 +14,18 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.Date;
 
 public class FareCalculatorServiceTest {
-
+    
+	
     private static FareCalculatorService fareCalculatorService;
     private Ticket ticket;
 
     @BeforeAll
-    private static void setUp() {
+    public static void setUp() {
         fareCalculatorService = new FareCalculatorService();
     }
 
     @BeforeEach
-    private void setUpPerTest() {
+    public void setUpPerTest() {
         ticket = new Ticket();
     }
 

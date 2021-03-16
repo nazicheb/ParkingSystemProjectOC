@@ -33,9 +33,14 @@ public class UserDAO {
             //LICENCE_PLATE_NUMBER)
             
             ps.setString(1, user.getlicenPlaNumber());
+            ps.execute();
+            dataBaseConfig.closePreparedStatement(ps);
             return ps.execute();
-           
-        }catch (Exception ex){
+            
+        }catch (RuntimeException e) {
+            throw e;
+        }
+        catch (Exception ex){
             logger.error("Error fetching next available slot",ex);
         }finally {
             dataBaseConfig.closeConnection(con);
@@ -62,7 +67,10 @@ public class UserDAO {
            dataBaseConfig.closeResultSet(rs);
            dataBaseConfig.closePreparedStatement(ps);
            
-        }catch (Exception ex){
+        }catch (RuntimeException e) {
+            throw e;
+        }
+        catch (Exception ex){
             logger.error("Error fetching next available slot",ex);
         }finally {
             dataBaseConfig.closeConnection(con);

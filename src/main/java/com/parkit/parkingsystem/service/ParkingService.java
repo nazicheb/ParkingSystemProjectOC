@@ -55,7 +55,7 @@ public class ParkingService {
                 ticket.setVehicleRegNumber(vehicleRegNumber);
                 ticket.setPrice(0);
                 ticket.setInTime(inTime);
-                ticket.setOutTime(null);
+               // ticket.setOutTime(null);
                 ticketDAO.saveTicket(ticket);
                 System.out.println("Generated Ticket and saved in DB");
                 System.out.println("Please park your vehicle in spot number:"+parkingSpot.getId());
@@ -133,9 +133,8 @@ public class ParkingService {
     
     public Boolean checkReccuringUser(String vehicNumber)
     {
-      
-    	User RecuUser=new User();
-    	RecuUser=userDAO.getUser(vehicNumber);
+    	
+    	User RecuUser=userDAO.getUser(vehicNumber);
     	
        if(RecuUser!=null)
        {
