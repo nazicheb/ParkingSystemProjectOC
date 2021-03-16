@@ -3,8 +3,10 @@ package com.parkit.parkingsystem.service;
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.dao.ParkingSpotDAO;
 import com.parkit.parkingsystem.dao.TicketDAO;
+import com.parkit.parkingsystem.dao.UserDAO;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
+import com.parkit.parkingsystem.model.User;
 import com.parkit.parkingsystem.util.InputReaderUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,18 +22,28 @@ public class ParkingService {
     private InputReaderUtil inputReaderUtil;
     private ParkingSpotDAO parkingSpotDAO;
     private  TicketDAO ticketDAO;
+    private  UserDAO userDAO;
+    
 
-    public ParkingService(InputReaderUtil inputReaderUtil, ParkingSpotDAO parkingSpotDAO, TicketDAO ticketDAO){
+    public ParkingService(InputReaderUtil inputReaderUtil, ParkingSpotDAO parkingSpotDAO, TicketDAO ticketDAO, UserDAO userDAO ){
         this.inputReaderUtil = inputReaderUtil;
         this.parkingSpotDAO = parkingSpotDAO;
         this.ticketDAO = ticketDAO;
+        this.userDAO = userDAO;
     }
-
+ 
+    private Boolean recurYesNo=false;
+    
     public void processIncomingVehicle() {
+    	
         try{
             ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
             if(parkingSpot !=null && parkingSpot.getId() > 0){
                 String vehicleRegNumber = getVehichleRegNumber();
+                
+                recurYesNo=checkReccuringUser(vehicleRegNumber);
+                FareCalculatorService.checkUser(recurYesNo);
+                
                 parkingSpot.setAvailable(false);
                 parkingSpotDAO.updateParking(parkingSpot);//allot this parking space and mark it's availability as false
 
@@ -58,6 +70,7 @@ public class ParkingService {
         System.out.println("Please type the vehicle registration number and press enter key");
         return inputReaderUtil.readVehicleRegistrationNumber();
     }
+   
 
     public ParkingSpot getNextParkingNumberIfAvailable(){
         int parkingNumber=0;
@@ -117,4 +130,25 @@ public class ParkingService {
             logger.error("Unable to process exiting vehicle",e);
         }
     }
+    
+    public Boolean checkReccuringUser(String vehicNumber)
+    {
+      
+    	User RecuUser=new User();
+    	RecuUser=userDAO.getUser(vehicNumber);
+    	
+       if(RecuUser!=null)
+       {
+    	   System.out.println("Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount.");
+           return true;
+       }
+       else
+       {
+    	   User nonRecuUser=new User();
+    	   nonRecuUser.setlicenPlaNumber(vehicNumber);
+    	   userDAO.saveUser(nonRecuUser);
+    	   
+    	    return false;
+       }
+   }
 }
