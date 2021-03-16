@@ -23,7 +23,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
+import java.nio.file.Path;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
+
 
 @ExtendWith(MockitoExtension.class)
 public class ParkingDataBaseIT {
@@ -39,7 +43,7 @@ public class ParkingDataBaseIT {
     private static InputReaderUtil inputReaderUtil;
 
     @BeforeAll
-    private static void setUp() throws Exception{
+    public static void setUp() throws Exception{
         parkingSpotDAO = new ParkingSpotDAO();
         parkingSpotDAO.dataBaseConfig = dataBaseTestConfig;
         ticketDAO = new TicketDAO();
@@ -50,7 +54,7 @@ public class ParkingDataBaseIT {
     }
 
     @BeforeEach
-    private void setUpPerTest() throws Exception {
+    public void setUpPerTest() throws Exception {
         when(inputReaderUtil.readSelection()).thenReturn(1);
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
         dataBasePrepareService.clearDataBaseEntries();
@@ -58,10 +62,9 @@ public class ParkingDataBaseIT {
     }
 
     @AfterAll
-    private static void tearDown(){
-
+    public static void tearDown(){
+    	
     }
-    
     
    
     @Test
@@ -90,13 +93,12 @@ public class ParkingDataBaseIT {
         
         Double genrfare=ticketDAO.getTicket("ABCDEF").getPrice();
         Date ouTime = ticketDAO.getTicket("ABCDEF").getOutTime();
-       
+     
         Boolean check=false;
-        
-        if (genrfare!=null && ouTime!=null) check=true;
+       
+       if (genrfare!=null && ouTime!=null) check=true;
         assertEquals(true, check);
-        
-        
+     
     }
     
     @Test

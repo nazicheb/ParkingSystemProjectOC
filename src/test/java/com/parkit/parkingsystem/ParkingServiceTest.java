@@ -34,7 +34,7 @@ public class ParkingServiceTest {
     private static UserDAO userDAO;
 
     @BeforeEach
-    private void setUpPerTest() {
+    public  void setUpPerTest() {
         try {
             when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
 
