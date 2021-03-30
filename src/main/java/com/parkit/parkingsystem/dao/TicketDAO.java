@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
+import java.util.Date;
 
 public class TicketDAO {
 
@@ -33,7 +34,7 @@ public class TicketDAO {
             ps.setTimestamp(5, (ticket.getOutTime() == null)?null: (new Timestamp(ticket.getOutTime().getTime())) );
             ps.execute();
             dataBaseConfig.closePreparedStatement(ps);
-            return ps.execute();
+            return true;
         }catch (RuntimeException e) {
             throw e;
         }
@@ -66,10 +67,7 @@ public class TicketDAO {
             }
             dataBaseConfig.closeResultSet(rs);
             dataBaseConfig.closePreparedStatement(ps);
-        }catch (RuntimeException e) {
-            throw e;
-        }
-        catch (Exception ex){
+        }catch (Exception ex){
             logger.error("Error fetching next available slot",ex);
         }finally {
             dataBaseConfig.closeConnection(con);
@@ -98,5 +96,29 @@ public class TicketDAO {
             dataBaseConfig.closeConnection(con);
         }
         return false;
+    }
+    public int checkVehicNumb(String vehicleRegNumber) {
+        Connection con = null;
+        int result=0;
+        try {
+            con = dataBaseConfig.getConnection();
+            PreparedStatement ps = con.prepareStatement(DBConstants.GET_VEHICLE_REG_NUMBER);
+            ps.setString(1, vehicleRegNumber);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                result = rs.getInt(1);;
+            }
+            dataBaseConfig.closeResultSet(rs);
+            dataBaseConfig.closePreparedStatement(ps);
+           
+        }catch (RuntimeException e) {
+            throw e;
+        }
+        catch (Exception ex){
+            logger.error("can't found Vehicule Registration Number in DB",ex);
+        }finally {
+            dataBaseConfig.closeConnection(con);
+        }
+        return result;
     }
 }

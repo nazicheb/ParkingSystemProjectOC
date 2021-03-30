@@ -15,18 +15,18 @@ public class DataBasePrepareService {
             connection = dataBaseTestConfig.getConnection();
             PreparedStatement ps1=connection.prepareStatement("update parking set available = true");
             PreparedStatement ps2=connection.prepareStatement("truncate table ticket");
-            PreparedStatement ps3=connection.prepareStatement("truncate table user");
+            
             
             //set parking entries to available
             ps1.execute();
             //clear ticket entries;
             ps2.execute();
           //clear user entries;
-            ps3.execute();
+            
             
             dataBaseTestConfig.closePreparedStatement(ps1);
             dataBaseTestConfig.closePreparedStatement(ps2);
-            dataBaseTestConfig.closePreparedStatement(ps3);
+           
         }catch (RuntimeException e) {
             throw e;
         }
