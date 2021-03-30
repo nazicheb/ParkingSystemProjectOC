@@ -3,10 +3,10 @@ package com.parkit.parkingsystem.service;
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.dao.ParkingSpotDAO;
 import com.parkit.parkingsystem.dao.TicketDAO;
-import com.parkit.parkingsystem.dao.UserDAO;
+
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
-import com.parkit.parkingsystem.model.User;
+
 import com.parkit.parkingsystem.util.InputReaderUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,14 +22,14 @@ public class ParkingService {
     private InputReaderUtil inputReaderUtil;
     private ParkingSpotDAO parkingSpotDAO;
     private  TicketDAO ticketDAO;
-    private  UserDAO userDAO;
+   
     
 
-    public ParkingService(InputReaderUtil inputReaderUtil, ParkingSpotDAO parkingSpotDAO, TicketDAO ticketDAO, UserDAO userDAO ){
+    public ParkingService(InputReaderUtil inputReaderUtil, ParkingSpotDAO parkingSpotDAO, TicketDAO ticketDAO){
         this.inputReaderUtil = inputReaderUtil;
         this.parkingSpotDAO = parkingSpotDAO;
         this.ticketDAO = ticketDAO;
-        this.userDAO = userDAO;
+        
     }
  
     private Boolean recurYesNo=false;
@@ -66,7 +66,7 @@ public class ParkingService {
         }
     }
 
-    private String getVehichleRegNumber() throws Exception {
+    public String getVehichleRegNumber() throws Exception {
         System.out.println("Please type the vehicle registration number and press enter key");
         return inputReaderUtil.readVehicleRegistrationNumber();
     }
@@ -91,7 +91,7 @@ public class ParkingService {
         return parkingSpot;
     }
 
-    private ParkingType getVehichleType(){
+    public ParkingType getVehichleType(){
         System.out.println("Please select vehicle type from menu");
         System.out.println("1 CAR");
         System.out.println("2 BIKE");
@@ -133,21 +133,15 @@ public class ParkingService {
     
     public Boolean checkReccuringUser(String vehicNumber)
     {
-    	
-    	User RecuUser=userDAO.getUser(vehicNumber);
-    	
-       if(RecuUser!=null)
-       {
-    	   System.out.println("Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount.");
-           return true;
-       }
-       else
-       {
-    	   User nonRecuUser=new User();
-    	   nonRecuUser.setlicenPlaNumber(vehicNumber);
-    	   userDAO.saveUser(nonRecuUser);
-    	   
-    	    return false;
-       }
+    	int checkRegNum=0;
+    	checkRegNum= ticketDAO.checkVehicNumb(vehicNumber);
+    	if(checkRegNum==1)
+    	{
+    		System.out.println("Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount.");
+    		return true;
+    	}
+    	else
+    	   return false;
+     
    }
 }
