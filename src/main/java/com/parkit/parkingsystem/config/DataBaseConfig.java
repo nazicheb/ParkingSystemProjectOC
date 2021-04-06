@@ -8,7 +8,7 @@ import java.sql.*;
 public class DataBaseConfig {
 
     private static final Logger logger = LogManager.getLogger("DataBaseConfig");
-    private static String url="jdbc:mysql://localhost:3306/prod";
+    private static String url="jdbc:mysql://localhost:3306/prod?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
     private static String coneuser="root";
     private static String keyuser="rootroot";
 
