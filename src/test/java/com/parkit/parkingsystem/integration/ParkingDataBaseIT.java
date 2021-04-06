@@ -27,7 +27,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
 
-
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -46,7 +45,7 @@ public class ParkingDataBaseIT {
     private static InputReaderUtil inputReaderUtil;
 
     @BeforeAll
-    private static void setUp() throws Exception{
+    public static void setUp() throws Exception{
         parkingSpotDAO = new ParkingSpotDAO();
         parkingSpotDAO.dataBaseConfig = dataBaseTestConfig;
         ticketDAO = new TicketDAO();
@@ -55,16 +54,14 @@ public class ParkingDataBaseIT {
     }
 
     @BeforeEach
-    private void setUpPerTest() throws Exception {
+    public void setUpPerTest() throws Exception {
         when(inputReaderUtil.readSelection()).thenReturn(1);
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
         dataBasePrepareService.clearDataBaseEntries();
     }
 
     @AfterAll
-    private static void tearDown(){
-
-    }
+    public static void tearDown(){}
 
     
    
@@ -74,20 +71,20 @@ public class ParkingDataBaseIT {
         parkingService.processIncomingVehicle();
         //TODO: check that a ticket is actualy saved in DB and Parking table is updated with availability
         
-      //  System.out.println(" results: "+ticketDAO.getTicket("ABCDEF"));
+        System.out.println(" results: "+ticketDAO.getTicket("ABCDEF"));
         
-     //     String checktic=ticketDAO.getTicket("ABCDEF").getVehicleRegNumber();
+         String checktic=ticketDAO.getTicket("ABCDEF").getVehicleRegNumber();
         
-     //    Boolean parktab=ticketDAO.getTicket("ABCDEF").getParkingSpot().isAvailable();
+         Boolean parktab=ticketDAO.getTicket("ABCDEF").getParkingSpot().isAvailable();
         
-     //     assertEquals("ABCDEF", checktic);
-     //     assertEquals(false, parktab);
+         assertEquals("ABCDEF", checktic);
+         assertEquals(false, parktab);
         
         //TODO: check for recurrent user
         
-    //  int checkrecu=ticketDAO.checkVehicNumb("ABCDEF");
+      int checkrecu=ticketDAO.checkVehicNumb("ABCDEF");
     	
-   	 //  assertEquals(1, checkrecu);
+   	   assertEquals(1, checkrecu);
   
         
         
@@ -101,16 +98,16 @@ public class ParkingDataBaseIT {
         //TODO: check that the fare generated and out time are populated correctly in the database
         
         
-     //     Double genrfare=ticketDAO.getTicket("ABCDEF").getPrice();
-     //    Date ouTime = ticketDAO.getTicket("ABCDEF").getOutTime();
+          Double genrfare=ticketDAO.getTicket("ABCDEF").getPrice();
+         Date ouTime = ticketDAO.getTicket("ABCDEF").getOutTime();
      
-     //     System.out.println("genrfare = "+genrfare);
-     //    System.out.println("ouTime = "+ouTime);
+          System.out.println("genrfare = "+genrfare);
+         System.out.println("ouTime = "+ouTime);
         
-     //    Boolean check=false;
+         Boolean check=false;
        
-     //     if (genrfare!=null && ouTime!=null) check=true;
-     //    assertEquals(true, check);
+          if (genrfare!=0 || ouTime!=null) check=true;
+         assertEquals(true, check);
      
     }
     
